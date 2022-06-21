@@ -1,10 +1,14 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, SxProps, Typography } from '@mui/material';
 import Input from '../UI/Input/Input';
 import Select from '../UI/Select/Select';
 import { FormEvent, useState } from 'react';
 import { Categories, Filters, Options, options } from '../../data/options';
 
-const SearchPanel = () => {
+interface SearchPanelProps {
+	sx?: SxProps;
+}
+
+const SearchPanel = ({ sx }: SearchPanelProps) => {
 	const [search, setSearch] = useState('');
 	const [category, setCategory] = useState<Options>(Categories.ALL);
 	const [filter, setFilter] = useState<Options>(Filters.NEWEST);
@@ -19,6 +23,7 @@ const SearchPanel = () => {
 			sx={{
 				textAlign: 'center',
 				mx: 'auto',
+				...sx,
 			}}
 			component={'form'}
 			maxWidth={'sm'}

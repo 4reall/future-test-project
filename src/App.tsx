@@ -6,6 +6,7 @@ import {
 	ThemeProvider,
 } from '@mui/material';
 import SearchPanel from './features/SearchPanel/SearchPanel';
+import BooksList from './features/BooksList/BooksList';
 
 const theme = responsiveFontSizes(
 	createTheme({
@@ -22,7 +23,8 @@ const App = () => {
 				}}
 				maxWidth={'lg'}
 			>
-				<SearchPanel />
+				<SearchPanel sx={{ mb: 3 }} />
+				<BooksList />
 			</Container>
 		</ThemeProvider>
 	);
