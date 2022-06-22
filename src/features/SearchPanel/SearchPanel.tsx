@@ -2,7 +2,7 @@ import { Box, Grid, Paper, SxProps, Typography } from '@mui/material';
 import Input from '../UI/Input/Input';
 import Select from '../UI/Select/Select';
 import { FormEvent, useState } from 'react';
-import { Categories, Filters, Options, options } from '../../data/options';
+import { Categories, Filters, Options, options } from '../UI/Select/options';
 
 interface SearchPanelProps {
 	sx?: SxProps;

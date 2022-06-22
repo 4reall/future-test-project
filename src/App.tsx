@@ -7,6 +7,9 @@ import {
 } from '@mui/material';
 import SearchPanel from './features/SearchPanel/SearchPanel';
 import BooksList from './features/BooksList/BooksList';
+import { useEffect } from 'react';
+import { fetchBooksByQuery } from './features/BooksList/booksSlice';
+import { useAppDispatch } from './hooks/hooks';
 
 const theme = responsiveFontSizes(
 	createTheme({
@@ -15,6 +18,10 @@ const theme = responsiveFontSizes(
 );
 
 const App = () => {
+	const dispatch = useAppDispatch();
+	useEffect(() => {
+		dispatch(fetchBooksByQuery('node'));
+	}, []);
 	return (
 		<ThemeProvider theme={theme}>
 			<Container
