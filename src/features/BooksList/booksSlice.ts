@@ -4,11 +4,7 @@ import {
 	createSlice,
 } from '@reduxjs/toolkit';
 import { Book, BooksApiResponse } from '../../api/types';
-import useBookAPI from '../../api/BookAPI';
-import axios, { AxiosResponse } from 'axios';
 import { Statuses } from './types';
-import useHttp from '../../api/httpRequest';
-import useFetch from '../../api/httpRequest';
 import BookAPI from '../../api/BookAPI';
 import { RootState } from '../../app/store';
 

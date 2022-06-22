@@ -26,7 +26,7 @@ const SearchPanel = ({ sx }: SearchPanelProps) => {
 				...sx,
 			}}
 			component={'form'}
-			maxWidth={'sm'}
+			maxWidth={'lg'}
 			onSubmit={handleSubmit}
 		>
 			<Typography
@@ -37,7 +37,11 @@ const SearchPanel = ({ sx }: SearchPanelProps) => {
 				Search for books
 			</Typography>
 			<Paper sx={{ p: { lg: 3, xs: 2 } }}>
-				<Grid container spacing={2}>
+				<Grid
+					container
+					spacing={2}
+					sx={{ maxWidth: 'sm', mx: { sm: 'auto' } }}
+				>
 					<Grid item xs={12}>
 						<Input
 							name={'search'}

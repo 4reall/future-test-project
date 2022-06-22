@@ -18,10 +18,6 @@ const theme = responsiveFontSizes(
 );
 
 const App = () => {
-	const dispatch = useAppDispatch();
-	useEffect(() => {
-		dispatch(fetchBooksByQuery('node'));
-	}, []);
 	return (
 		<ThemeProvider theme={theme}>
 			<Container
