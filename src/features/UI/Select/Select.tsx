@@ -7,19 +7,19 @@ import {
 	SxProps,
 	Typography,
 } from '@mui/material';
-import { Options } from './options';
+import { Options } from '../../SearchPanel/options';
 
 interface SelectProps {
 	label: string;
 	name: string;
 	options: Options[];
 	value: Options;
-	setValue: Dispatch<SetStateAction<Options>>;
+	setValue: Dispatch<SetStateAction<any>>;
 	sx?: SxProps;
 }
 
 const Select = ({ label, name, options, value, setValue, sx }: SelectProps) => {
-	const handleChange = (event: SelectChangeEvent<Options>) => {
+	const handleChange = (event: SelectChangeEvent) => {
 		setValue(event.target.value as Options);
 	};
 	const items = options.map((option, i) => (

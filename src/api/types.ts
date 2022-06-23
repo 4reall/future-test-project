@@ -1,3 +1,5 @@
+import { Categories } from '../features/SearchPanel/options';
+
 export interface Book {
 	id: string;
 	volumeInfo: {
@@ -16,4 +18,11 @@ export interface Book {
 export interface BooksApiResponse {
 	totalItems: number;
 	items: Book[];
+}
+
+export interface FetchByQueryProps {
+	q: string;
+	orderBy?: string;
+	startIndex?: number;
+	[otherOption: string]: unknown;
 }

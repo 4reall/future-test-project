@@ -1,23 +1,23 @@
 export enum Categories {
-	ALL = 'all',
-	ART = 'art',
-	BIOGRAPHY = 'biography',
-	COMPUTERS = 'computers',
-	HISTORY = 'history',
+	ALL = 'All',
+	ART = 'Art',
+	BIOGRAPHY = 'Biography',
+	COMPUTERS = 'Computers',
+	HISTORY = 'History',
 	MEDICAL = 'Medical',
-	POETRY = 'poetry',
+	POETRY = 'Poetry',
 }
 
-export enum Filters {
+export enum SortOptions {
 	RELEVANCE = 'relevance',
 	NEWEST = 'newest',
 }
 
-export type Options = Categories | Filters;
+export type Options = Categories | SortOptions;
 
 type OptionsConfig = {
 	categories: Categories[];
-	filters: Filters[];
+	filters: SortOptions[];
 };
 
 export const options: OptionsConfig = {
@@ -30,5 +30,5 @@ export const options: OptionsConfig = {
 		Categories.MEDICAL,
 		Categories.POETRY,
 	],
-	filters: [Filters.NEWEST, Filters.RELEVANCE],
+	filters: [SortOptions.NEWEST, SortOptions.RELEVANCE],
 };

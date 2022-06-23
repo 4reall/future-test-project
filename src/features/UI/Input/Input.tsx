@@ -6,10 +6,11 @@ interface InputProps {
 	name: string;
 	value: string;
 	setValue: Dispatch<SetStateAction<string>>;
+	isValid: boolean;
 	sx?: SxProps;
 }
 
-const Input = ({ name, value, setValue, sx }: InputProps) => {
+const Input = ({ name, value, setValue, isValid, sx }: InputProps) => {
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setValue(event.target.value);
 	};
@@ -21,6 +22,7 @@ const Input = ({ name, value, setValue, sx }: InputProps) => {
 			}}
 		>
 			<InputMUI
+				error={!isValid}
 				name={name}
 				fullWidth
 				placeholder="Enter book name"

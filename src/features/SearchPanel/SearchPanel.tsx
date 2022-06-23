@@ -2,20 +2,38 @@ import { Box, Grid, Paper, SxProps, Typography } from '@mui/material';
 import Input from '../UI/Input/Input';
 import Select from '../UI/Select/Select';
 import { FormEvent, useState } from 'react';
-import { Categories, Filters, Options, options } from '../UI/Select/options';
+import { Categories, SortOptions, Options, options } from './options';
+import { useAppDispatch } from '../../hooks/hooks';
+import {
+	changeActiveCategory,
+	changeLastQuery,
+	fetchBooksByQuery,
+	setIsNewQuery,
+} from '../BooksList/booksSlice';
 
 interface SearchPanelProps {
 	sx?: SxProps;
 }
 
 const SearchPanel = ({ sx }: SearchPanelProps) => {
-	const [search, setSearch] = useState('');
-	const [category, setCategory] = useState<Options>(Categories.ALL);
-	const [filter, setFilter] = useState<Options>(Filters.NEWEST);
+	const [searchQuery, setSearchQuery] = useState('');
+	const [category, setCategory] = useState(Categories.ALL);
+	const [sortOption, setSortOption] = useState(SortOptions.NEWEST);
+	const [isValid, setIsValid] = useState(true);
+
+	const dispatch = useAppDispatch();
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log(search);
+		if (searchQuery.trim().length < 1) {
+			setIsValid(false);
+			return;
+		}
+		setIsValid(true);
+		dispatch(setIsNewQuery());
+		dispatch(changeActiveCategory(category));
+		dispatch(changeLastQuery(searchQuery));
+		dispatch(fetchBooksByQuery({ q: searchQuery, orderBy: sortOption }));
 	};
 
 	return (
@@ -44,9 +62,10 @@ const SearchPanel = ({ sx }: SearchPanelProps) => {
 				>
 					<Grid item xs={12}>
 						<Input
+							isValid={isValid}
 							name={'search'}
-							value={search}
-							setValue={setSearch}
+							value={searchQuery}
+							setValue={setSearchQuery}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}>
@@ -63,8 +82,8 @@ const SearchPanel = ({ sx }: SearchPanelProps) => {
 							label={'sorting by'}
 							name={'filters'}
 							options={options.filters}
-							value={filter}
-							setValue={setFilter}
+							value={sortOption}
+							setValue={setSortOption}
 						/>
 					</Grid>
 				</Grid>
