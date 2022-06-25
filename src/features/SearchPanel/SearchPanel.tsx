@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, SxProps } from '@mui/material';
 
 import Input from '../UI/Input';
 import Select from '../UI/Select';
@@ -8,7 +8,11 @@ import { options } from './options';
 
 import { Statuses } from '../../types';
 
-const SearchPanel = () => {
+interface SearchPanelContentProps {
+	sx?: SxProps;
+}
+
+const SearchPanel = ({ sx }: SearchPanelContentProps) => {
 	const {
 		booksLoadingStatus,
 		isValid,
@@ -22,7 +26,7 @@ const SearchPanel = () => {
 	} = useSearchPanel();
 
 	return (
-		<Box component={'form'} onSubmit={handleSubmit}>
+		<Box component={'form'} onSubmit={handleSubmit} sx={{ ...sx }}>
 			<Grid
 				container
 				spacing={2}

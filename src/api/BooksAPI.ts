@@ -14,7 +14,7 @@ class BooksAPI {
 			params: {
 				key: BooksAPI._apiKey,
 				maxResults: 30,
-				projection: 'lite',
+				projection: 'full',
 			},
 		});
 	};
@@ -56,7 +56,11 @@ class BooksAPI {
 	};
 
 	private static _transformItemResponse = (response: AxiosResponse) => {
-		return transformToBookType(response.data);
+		try {
+			return transformToBookType(response.data);
+		} catch (e) {
+			throw new Error(`transform error`);
+		}
 	};
 }
 
