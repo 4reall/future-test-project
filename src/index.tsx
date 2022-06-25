@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import App from './App';
-import './styles/index.module.css';
+import './index.css';
 import { CssBaseline } from '@mui/material';
 
 const container = document.getElementById('root')!;

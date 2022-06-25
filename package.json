@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://4reall.github.io/future-test-project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,13 +20,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
-    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "sass": "^1.52.3",
+    "react-transition-group": "^4.4.2",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

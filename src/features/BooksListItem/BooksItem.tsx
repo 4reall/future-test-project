@@ -1,68 +1,47 @@
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import img from '../../assets/img.png';
-import { useMemo } from 'react';
+
+import { createTypographyList } from '../../helpers/helpers';
+import styles from './styles';
 
 interface BooksItemProps {
+	id: string;
 	title: string;
 	description: string;
 	authors: string[];
 	categories: string[];
 	thumbnail: string;
+	handleClick: () => void;
 }
 
 const BooksItem = ({
 	title,
-	description,
 	authors,
 	categories,
 	thumbnail,
+	handleClick,
 }: BooksItemProps) => {
-	const renderAuthors = () => {
-		return authors.map((author, i) => (
-			<Typography
-				key={i}
-				variant={'overline'}
-				component={'div'}
-				sx={{ textDecoration: 'underline', lineHeight: 1.5 }}
-			>
-				{author}
-			</Typography>
-		));
-	};
+	const authorsList = createTypographyList({
+		list: authors,
+		variant: 'overline',
+		component: 'div',
+		sx: styles.authors,
+	});
 	return (
-		<Card
-			variant="outlined"
-			sx={{
-				minHeight: '100%',
-				p: 2,
-				background: '',
-				boxShadow: 3,
-			}}
-		>
+		<Card onClick={handleClick} variant="outlined" sx={styles.card}>
 			<CardMedia
 				component={'img'}
 				alt={title}
 				image={thumbnail}
-				sx={{
-					mx: 'auto',
-					width: 'auto',
-					height: '8rem',
-					objectFit: 'contain',
-					boxShadow: 3,
-					mb: 'auto',
-				}}
+				sx={styles.img}
 			/>
 			<CardContent>
-				<Typography
-					variant={'overline'}
-					sx={{ textDecoration: 'underline' }}
-				>
+				<Typography variant={'overline'} sx={styles.categories}>
 					{categories && categories[0]}
 				</Typography>
 				<Typography variant={'body2'} mb={1}>
 					{title}
 				</Typography>
-				{authors && renderAuthors()}
+				{authorsList}
 			</CardContent>
 		</Card>
 	);

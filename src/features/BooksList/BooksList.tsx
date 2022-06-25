@@ -1,93 +1,81 @@
-import { Button, Grid, LinearProgress, Paper, Typography } from '@mui/material';
+import { Fade, Grid, LinearProgress, Typography } from '@mui/material';
+
 import BooksItem from '../BooksListItem/BooksItem';
-import { useSelector } from 'react-redux';
-import { fetchBooksByQuery, filteredBooksSelector } from './booksSlice';
-import { RootState } from '../../app/store';
-import { useAppDispatch } from '../../hooks/hooks';
-import { useState } from 'react';
-import { Statuses } from './types';
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import useBooksList from './useBooksList';
+import Content from './Content';
+
+import { Statuses } from '../../types';
 
 const BooksList = () => {
-	const [offset, setOffset] = useState(0);
+	const {
+		isLastPage,
+		filteredBooks,
+		booksLoadingStatus,
+		isNewQuery,
+		totalItems,
+		handleButtonClick,
+		handleCardClick,
+	} = useBooksList();
 
-	const { totalItems, booksLoadingStatus, lastQuery, isNewQuery } =
-		useSelector((state: RootState) => state.books);
-	const filteredBooks = useSelector(filteredBooksSelector);
-	const dispatch = useAppDispatch();
-
-	const handleClick = () => {
-		dispatch(fetchBooksByQuery({ q: lastQuery, startIndex: offset }));
-		setOffset((prevState) => prevState + filteredBooks.length);
-	};
-
-	const items = filteredBooks.map((item, i) => {
+	const items = filteredBooks.map((item) => {
 		return (
-			<Grid key={item.id} item xs={12} sm={6} md={4} lg={2.4}>
-				<BooksItem
-					title={item.volumeInfo.title}
-					categories={item.volumeInfo.categories}
-					thumbnail={item.volumeInfo.imageLinks.smallThumbnail}
-					authors={item.volumeInfo.authors}
-					description={item.volumeInfo.description}
-				/>
-			</Grid>
+			<Fade timeout={500} key={item.id}>
+				<Grid item xs={12} sm={6} md={4} lg={3}>
+					<BooksItem
+						id={item.id}
+						title={item.volumeInfo.title}
+						categories={item.volumeInfo.categories}
+						thumbnail={item.volumeInfo.imageLinks.thumbnail}
+						authors={item.volumeInfo.authors}
+						description={item.volumeInfo.description}
+						handleClick={handleCardClick(item.id)}
+					/>
+				</Grid>
+			</Fade>
 		);
 	});
 
-	const emptyList =
+	if (
 		filteredBooks.length < 1 &&
 		booksLoadingStatus !== Statuses.ERROR &&
-		booksLoadingStatus !== Statuses.LOADING ? (
+		booksLoadingStatus !== Statuses.LOADING
+	) {
+		return (
 			<Typography variant={'h5'} align={'center'}>
-				There are no books here
+				{isNewQuery
+					? 'There are no books here'
+					: 'We did not found anything by your query'}
 			</Typography>
-		) : null;
+		);
+	}
+
 	const errorMessage =
-		booksLoadingStatus === Statuses.ERROR ? <ErrorMessage /> : null;
-	const spinner =
+		booksLoadingStatus === Statuses.ERROR ? (
+			<ErrorMessage message="Something went wrong." />
+		) : null;
+	const loadingMessage =
 		booksLoadingStatus === Statuses.LOADING && isNewQuery ? (
 			<LinearProgress />
 		) : null;
 	const content =
 		(booksLoadingStatus === Statuses.IDLE && filteredBooks.length > 0) ||
 		!isNewQuery ? (
-			<>
-				<Typography variant="h5" align={'center'} mb={2}>
-					Found {totalItems} results
-				</Typography>
-				<Grid container spacing={2}>
-					{items}
-				</Grid>
-				<Button
-					variant={'outlined'}
-					sx={{
-						textTransform: 'uppercase',
-						mx: 'auto',
-						display: 'block',
-						mt: 3,
-					}}
-					onClick={handleClick}
-					disabled={booksLoadingStatus === Statuses.LOADING}
-				>
-					Load more
-				</Button>
-			</>
+			<Content
+				totalItems={totalItems}
+				items={items}
+				handleButtonClick={handleButtonClick}
+				booksLoadingStatus={booksLoadingStatus}
+				isLastPage={isLastPage}
+			/>
 		) : null;
 
 	return (
-		<Paper
-			sx={{
-				p: 2,
-			}}
-		>
-			<>
-				{emptyList}
-				{errorMessage}
-				{spinner}
-				{content}
-			</>
-		</Paper>
+		<>
+			{errorMessage}
+			{loadingMessage}
+			{content}
+		</>
 	);
 };
 

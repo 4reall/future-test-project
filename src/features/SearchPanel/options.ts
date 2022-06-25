@@ -1,17 +1,4 @@
-export enum Categories {
-	ALL = 'All',
-	ART = 'Art',
-	BIOGRAPHY = 'Biography',
-	COMPUTERS = 'Computers',
-	HISTORY = 'History',
-	MEDICAL = 'Medical',
-	POETRY = 'Poetry',
-}
-
-export enum SortOptions {
-	RELEVANCE = 'relevance',
-	NEWEST = 'newest',
-}
+import { Categories, SortOptions } from '../../types';
 
 export type Options = Categories | SortOptions;
 
@@ -30,5 +17,5 @@ export const options: OptionsConfig = {
 		Categories.MEDICAL,
 		Categories.POETRY,
 	],
-	filters: [SortOptions.NEWEST, SortOptions.RELEVANCE],
+	filters: [SortOptions.RELEVANCE, SortOptions.NEWEST],
 };

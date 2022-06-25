@@ -7,7 +7,7 @@ import {
 	SxProps,
 	Typography,
 } from '@mui/material';
-import { Options } from '../../SearchPanel/options';
+import { Options } from '../SearchPanel/options';
 
 interface SelectProps {
 	label: string;

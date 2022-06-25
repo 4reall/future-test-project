@@ -7,10 +7,18 @@ interface InputProps {
 	value: string;
 	setValue: Dispatch<SetStateAction<string>>;
 	isValid: boolean;
+	isDisabled: boolean;
 	sx?: SxProps;
 }
 
-const Input = ({ name, value, setValue, isValid, sx }: InputProps) => {
+const Input = ({
+	name,
+	value,
+	setValue,
+	isValid,
+	sx,
+	isDisabled,
+}: InputProps) => {
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setValue(event.target.value);
 	};
@@ -29,7 +37,7 @@ const Input = ({ name, value, setValue, isValid, sx }: InputProps) => {
 				value={value}
 				onChange={handleChange}
 			/>
-			<IconButton type={'submit'}>
+			<IconButton disabled={isDisabled} type={'submit'}>
 				<Search />
 			</IconButton>
 		</Box>

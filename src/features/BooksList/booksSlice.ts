@@ -5,26 +5,47 @@ import {
 	createSlice,
 	PayloadAction,
 } from '@reduxjs/toolkit';
-import { Book, BooksApiResponse, FetchByQueryProps } from '../../api/types';
-import { Statuses } from './types';
-import BookAPI from '../../api/BookAPI';
+
+import BooksAPI from '../../api/BooksAPI';
+
+import {
+	BooksApiResponse,
+	FetchByIdProps,
+	FetchByQueryProps,
+} from '../../api/types';
+import { Statuses } from '../../types';
 import { RootState } from '../../app/store';
-import { Categories } from '../SearchPanel/options';
+import { Categories } from '../../types';
+import { Book } from '../../api/types';
 
 const booksAdapter = createEntityAdapter<Book>();
 
 const initialState = booksAdapter.getInitialState({
 	totalItems: 0,
+	offset: 0,
 	activeCategory: Categories.ALL,
 	lastQuery: '',
 	isNewQuery: true,
+	isLastPage: false,
 	booksLoadingStatus: Statuses.IDLE,
 });
 
-export const fetchBooksByQuery = createAsyncThunk(
-	'books/fetchBooksByQuery',
-	async (params: FetchByQueryProps): Promise<BooksApiResponse> => {
-		return await BookAPI.fetchByQuery<BooksApiResponse>(params);
+export const fetchBooksByQuery = createAsyncThunk<
+	BooksApiResponse,
+	FetchByQueryProps,
+	{ state: RootState }
+>('books/fetchBooksByQuery', async (params, { getState }) => {
+	const { offset } = getState().books;
+	return await BooksAPI.fetchByQuery<BooksApiResponse>({
+		...params,
+		startIndex: offset,
+	});
+});
+
+export const fetchBookById = createAsyncThunk<Book, FetchByIdProps>(
+	'books/fetchBookById',
+	async (params) => {
+		return await BooksAPI.fetchById<Book>(params);
 	}
 );
 
@@ -32,20 +53,25 @@ const booksSlice = createSlice({
 	name: 'books',
 	initialState,
 	reducers: {
-		changeActiveCategory: (state, action: PayloadAction<Categories>) => {
+		setActiveCategory: (state, action: PayloadAction<Categories>) => {
 			state.activeCategory = action.payload;
 		},
-		changeLastQuery: (state, action: PayloadAction<string>) => {
+		setLastQuery: (state, action: PayloadAction<string>) => {
 			state.lastQuery = action.payload;
 		},
-		setIsNewQuery: (state) => {
-			state.isNewQuery = true;
+		setIsNewQuery: (state, action: PayloadAction<boolean>) => {
+			state.isNewQuery = action.payload;
 		},
+		setIsLastPage: (state, action: PayloadAction<boolean>) => {
+			state.isLastPage = action.payload;
+		},
+		removeBook: booksAdapter.removeOne,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchBooksByQuery.pending, (state) => {
 			state.booksLoadingStatus = Statuses.LOADING;
 		});
+
 		builder.addCase(fetchBooksByQuery.fulfilled, (state, action) => {
 			state.booksLoadingStatus = Statuses.IDLE;
 			state.totalItems = action.payload.totalItems;
@@ -55,15 +81,31 @@ const booksSlice = createSlice({
 			} else {
 				booksAdapter.addMany(state, action.payload.items);
 			}
+			state.offset += action.payload.items.length;
 		});
+
 		builder.addCase(fetchBooksByQuery.rejected, (state, action) => {
+			console.log(action.error);
+			state.booksLoadingStatus = Statuses.ERROR;
+		});
+
+		builder.addCase(fetchBookById.pending, (state) => {
+			state.booksLoadingStatus = Statuses.LOADING;
+		});
+
+		builder.addCase(fetchBookById.fulfilled, (state, action) => {
+			state.booksLoadingStatus = Statuses.IDLE;
+			booksAdapter.addOne(state, action.payload);
+		});
+
+		builder.addCase(fetchBookById.rejected, (state, action) => {
 			console.log(action.error);
 			state.booksLoadingStatus = Statuses.ERROR;
 		});
 	},
 });
 
-export const { selectAll: selectAllBooks } =
+export const { selectAll: selectAllBooks, selectById: selectBookById } =
 	booksAdapter.getSelectors<RootState>((state) => state.books);
 
 export const filteredBooksSelector = createSelector(
@@ -83,6 +125,7 @@ export const filteredBooksSelector = createSelector(
 
 const { reducer, actions } = booksSlice;
 
-export const { changeActiveCategory, changeLastQuery, setIsNewQuery } = actions;
+export const { setActiveCategory, setLastQuery, setIsNewQuery, setIsLastPage } =
+	actions;
 
 export default reducer;
