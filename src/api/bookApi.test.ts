@@ -4,8 +4,8 @@ import notFoundImg from '../assets/not-found.png';
 
 describe('API test', () => {
 	test('Transform book correct', () => {
-		const mockTransformToBookType = jest.fn(transformToBookType);
-		const mockNotFullBook = {
+		const mockedTransformToBookType = jest.fn(transformToBookType);
+		const mockedNotFullBook = {
 			id: '123',
 			volumeInfo: {
 				title: '123',
@@ -14,7 +14,7 @@ describe('API test', () => {
 				pageCount: '123',
 			},
 		};
-		const mockFullBook = {
+		const mockedFullBook = {
 			id: '123',
 			volumeInfo: {
 				title: '123',
@@ -28,7 +28,7 @@ describe('API test', () => {
 				},
 			},
 		};
-		expect(mockTransformToBookType(mockNotFullBook)).toEqual({
+		expect(mockedTransformToBookType(mockedNotFullBook)).toEqual({
 			id: '123',
 			volumeInfo: {
 				title: '123',
@@ -42,6 +42,8 @@ describe('API test', () => {
 				},
 			},
 		});
-		expect(mockTransformToBookType(mockFullBook)).toEqual(mockFullBook);
+		expect(mockedTransformToBookType(mockedFullBook)).toEqual(
+			mockedFullBook
+		);
 	});
 });

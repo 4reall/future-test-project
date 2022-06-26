@@ -1,1 +1,0 @@
-import BooksList from './BooksList';
