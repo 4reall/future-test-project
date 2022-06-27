@@ -51,7 +51,7 @@ class BooksAPI {
 				items: items,
 			};
 		} catch (e) {
-			throw new Error(`transform error`);
+			throw new Error(`transform list error`);
 		}
 	};
 
@@ -59,7 +59,7 @@ class BooksAPI {
 		try {
 			return transformToBookType(response.data);
 		} catch (e) {
-			throw new Error(`transform error`);
+			throw new Error(`transform item error`);
 		}
 	};
 }

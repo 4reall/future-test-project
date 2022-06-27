@@ -1,19 +1,14 @@
 import { Box, Typography } from '@mui/material';
-import { ArrowBack, ErrorOutline } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { ErrorOutline } from '@mui/icons-material';
 
-import CircledButton from '../UI/CircledButton';
-import { paths } from '../../pages/paths';
+import { ReactNode } from 'react';
 
 interface ErrorMessageProps {
+	children?: ReactNode;
 	message: string;
 }
 
-const ErrorMessage = ({ message }: ErrorMessageProps) => {
-	const navigate = useNavigate();
-	const handleClick = () => {
-		navigate(paths.mainPage);
-	};
+const ErrorMessage = ({ message, children }: ErrorMessageProps) => {
 	return (
 		<Box sx={{ textAlign: 'center', position: 'relative' }}>
 			<ErrorOutline
@@ -21,9 +16,7 @@ const ErrorMessage = ({ message }: ErrorMessageProps) => {
 			/>
 			<Typography variant="h4">Oops!</Typography>
 			<Typography variant="h5">{message}</Typography>
-			<CircledButton handleClick={handleClick}>
-				<ArrowBack />
-			</CircledButton>
+			{children}
 		</Box>
 	);
 };

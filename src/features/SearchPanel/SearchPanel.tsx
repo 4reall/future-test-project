@@ -41,7 +41,6 @@ const SearchPanel = ({ sx }: SearchPanelContentProps) => {
 					}}
 				>
 					<Input
-						isDisabled={booksLoadingStatus === Statuses.LOADING}
 						isValid={isValid}
 						name={'search'}
 						value={searchQuery}

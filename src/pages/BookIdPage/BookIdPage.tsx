@@ -11,11 +11,14 @@ import { useAppDispatch } from '../../hooks/hooks';
 import {
 	fetchBookById,
 	selectBookById,
+	setBooksLoadingStatus,
 } from '../../features/BooksList/booksSlice';
 import { paths } from '../paths';
 
 import { RootState, store } from '../../app/store';
 import { Statuses } from '../../types';
+import { ArrowBack } from '@mui/icons-material';
+import CircledButton from '../../features/UI/CircledButton';
 
 const BookIdPage = () => {
 	const { bookId } = useParams();
@@ -31,6 +34,9 @@ const BookIdPage = () => {
 	}, [bookId]);
 
 	const handleClick = () => {
+		if (booksLoadingStatus === Statuses.ERROR)
+			dispatch(setBooksLoadingStatus(Statuses.IDLE));
+
 		navigate(paths.mainPage);
 	};
 
@@ -44,7 +50,11 @@ const BookIdPage = () => {
 	if (booksLoadingStatus === Statuses.ERROR) {
 		return (
 			<MainContainer>
-				<ErrorMessage message="There is not such book" />
+				<ErrorMessage message="There is not such book">
+					<CircledButton handleClick={handleClick}>
+						<ArrowBack />
+					</CircledButton>
+				</ErrorMessage>
 			</MainContainer>
 		);
 	}

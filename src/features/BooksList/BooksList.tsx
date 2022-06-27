@@ -60,7 +60,7 @@ const BooksList = () => {
 		) : null;
 	const content =
 		(booksLoadingStatus === Statuses.IDLE && filteredBooks.length > 0) ||
-		!isNewQuery ? (
+		(!isNewQuery && booksLoadingStatus !== Statuses.ERROR) ? (
 			<Content
 				totalItems={totalItems}
 				items={items}

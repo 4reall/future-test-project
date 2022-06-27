@@ -65,6 +65,9 @@ const booksSlice = createSlice({
 		setIsLastPage: (state, action: PayloadAction<boolean>) => {
 			state.isLastPage = action.payload;
 		},
+		setBooksLoadingStatus: (state, action: PayloadAction<Statuses>) => {
+			state.booksLoadingStatus = action.payload;
+		},
 		removeBook: booksAdapter.removeOne,
 	},
 	extraReducers: (builder) => {
@@ -125,7 +128,12 @@ export const filteredBooksSelector = createSelector(
 
 const { reducer, actions } = booksSlice;
 
-export const { setActiveCategory, setLastQuery, setIsNewQuery, setIsLastPage } =
-	actions;
+export const {
+	setActiveCategory,
+	setLastQuery,
+	setIsNewQuery,
+	setIsLastPage,
+	setBooksLoadingStatus,
+} = actions;
 
 export default reducer;
