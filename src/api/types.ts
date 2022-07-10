@@ -1,3 +1,5 @@
+import { Categories } from '../types';
+
 export interface BooksApiResponse {
 	totalItems: number;
 	items: Book[];
@@ -5,6 +7,7 @@ export interface BooksApiResponse {
 
 export interface FetchByQueryProps {
 	q: string;
+	subject?: Categories;
 	orderBy?: string;
 	startIndex?: number;
 }
@@ -18,7 +21,7 @@ export interface Book {
 		title: string;
 		authors: string[];
 		description: string;
-		pageCount: 308;
+		pageCount: number;
 		categories: string[];
 		imageLinks: {
 			smallThumbnail: string;

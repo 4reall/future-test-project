@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import {
 	setIsLastPage,
 	fetchBooksByQuery,
-	filteredBooksSelector,
+	// filteredBooksSelector,
+	selectAllBooks,
 } from './booksSlice';
 import { useAppDispatch } from '../../hooks/hooks';
 import { paths } from '../../pages/paths';
@@ -19,29 +20,27 @@ const useBooksList = () => {
 		isNewQuery,
 		isLastPage,
 	} = useSelector((state: RootState) => state.books);
-	const filteredBooks = useSelector(filteredBooksSelector);
+
+	const books = useSelector(selectAllBooks);
+
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
 	const handleCardClick = (id: string) => {
 		return () => {
-			// dispatch(fetchBookById({ volumeId: id }));
 			navigate(`${paths.mainPage}/${id}`);
 		};
 	};
 
 	const handleButtonClick = () => {
-		if (
-			filteredBooks.length < 30 ||
-			totalItems - filteredBooks.length < 30
-		) {
+		if (books.length < 30 || totalItems - books.length < 30) {
 			dispatch(setIsLastPage(true));
 			return;
 		}
 		dispatch(fetchBooksByQuery({ q: lastQuery }));
 	};
 	return {
-		filteredBooks,
+		filteredBooks: books,
 		totalItems,
 		booksLoadingStatus,
 		lastQuery,

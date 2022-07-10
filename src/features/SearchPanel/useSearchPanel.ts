@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../../hooks/hooks';
 import {
-	setActiveCategory,
+	// setActiveCategory,
 	setIsLastPage,
 	setLastQuery,
 	fetchBooksByQuery,
@@ -33,17 +33,27 @@ const useSearchPanel = () => {
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+
+		const query =
+			category === Categories.ALL
+				? searchQuery
+				: `${searchQuery}+subject:${category}`;
+
 		if (searchQuery.trim().length < 1) {
 			setIsValid(false);
 			return;
 		}
 		dispatch(setIsLastPage(false));
 		dispatch(setIsNewQuery(true));
-		dispatch(setActiveCategory(category));
-		dispatch(setLastQuery(searchQuery));
+		dispatch(setLastQuery(query));
+
 		dispatch(
-			fetchBooksByQuery({ q: searchQuery.trim(), orderBy: sortOption })
+			fetchBooksByQuery({
+				q: query,
+				orderBy: sortOption,
+			})
 		);
+
 		resetForm();
 	};
 

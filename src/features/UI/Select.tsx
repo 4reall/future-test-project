@@ -25,7 +25,7 @@ const Select = memo(
 		};
 		const items = options.map((option, i) => (
 			<MenuItem key={i} value={option}>
-				{option}
+				{option.toUpperCase()}
 			</MenuItem>
 		));
 		return (

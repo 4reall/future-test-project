@@ -1,7 +1,6 @@
 import {
 	createAsyncThunk,
 	createEntityAdapter,
-	createSelector,
 	createSlice,
 	PayloadAction,
 } from '@reduxjs/toolkit';
@@ -15,15 +14,14 @@ import {
 } from '../../api/types';
 import { Statuses } from '../../types';
 import { RootState } from '../../app/store';
-import { Categories } from '../../types';
 import { Book } from '../../api/types';
 
 const booksAdapter = createEntityAdapter<Book>();
 
 const initialState = booksAdapter.getInitialState({
 	totalItems: 0,
-	offset: 0,
-	activeCategory: Categories.ALL,
+	startIndex: 0,
+	// activeCategory: Categories.ALL,
 	lastQuery: '',
 	isNewQuery: true,
 	isLastPage: false,
@@ -35,10 +33,10 @@ export const fetchBooksByQuery = createAsyncThunk<
 	FetchByQueryProps,
 	{ state: RootState }
 >('books/fetchBooksByQuery', async (params, { getState }) => {
-	const { offset } = getState().books;
+	const { startIndex, isNewQuery } = getState().books;
 	return await BooksAPI.fetchByQuery<BooksApiResponse>({
 		...params,
-		startIndex: offset,
+		startIndex: isNewQuery ? 0 : startIndex,
 	});
 });
 
@@ -53,9 +51,6 @@ const booksSlice = createSlice({
 	name: 'books',
 	initialState,
 	reducers: {
-		setActiveCategory: (state, action: PayloadAction<Categories>) => {
-			state.activeCategory = action.payload;
-		},
 		setLastQuery: (state, action: PayloadAction<string>) => {
 			state.lastQuery = action.payload;
 		},
@@ -68,7 +63,6 @@ const booksSlice = createSlice({
 		setBooksLoadingStatus: (state, action: PayloadAction<Statuses>) => {
 			state.booksLoadingStatus = action.payload;
 		},
-		removeBook: booksAdapter.removeOne,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchBooksByQuery.pending, (state) => {
@@ -81,10 +75,11 @@ const booksSlice = createSlice({
 			if (state.isNewQuery) {
 				booksAdapter.setAll(state, action.payload.items);
 				state.isNewQuery = false;
+				state.startIndex = action.payload.items.length;
 			} else {
 				booksAdapter.addMany(state, action.payload.items);
+				state.startIndex += action.payload.items.length;
 			}
-			state.offset += action.payload.items.length;
 		});
 
 		builder.addCase(fetchBooksByQuery.rejected, (state, action) => {
@@ -111,25 +106,9 @@ const booksSlice = createSlice({
 export const { selectAll: selectAllBooks, selectById: selectBookById } =
 	booksAdapter.getSelectors<RootState>((state) => state.books);
 
-export const filteredBooksSelector = createSelector(
-	(state: RootState) => state.books.activeCategory,
-	selectAllBooks,
-	(activeCategory, books) => {
-		if (activeCategory === Categories.ALL) return books;
-		return books.filter((book) => {
-			let haveCategory = false;
-			book.volumeInfo.categories.forEach((category) => {
-				if (category.includes(activeCategory)) haveCategory = true;
-			});
-			return haveCategory;
-		});
-	}
-);
-
 const { reducer, actions } = booksSlice;
 
 export const {
-	setActiveCategory,
 	setLastQuery,
 	setIsNewQuery,
 	setIsLastPage,

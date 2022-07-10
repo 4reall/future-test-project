@@ -20,3 +20,7 @@ export const createTypographyList = ({
 	}
 	return [];
 };
+
+export const concatQuery = (query: string, terms: string[]) => {
+	return `${query}+${terms.map((item) => item.toLowerCase()).join('+')}`;
+};

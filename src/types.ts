@@ -4,13 +4,13 @@ export enum Statuses {
 	ERROR = 'error',
 }
 export enum Categories {
-	ALL = 'All',
-	ART = 'Art',
-	BIOGRAPHY = 'Biography',
-	COMPUTERS = 'Computers',
-	HISTORY = 'History',
-	MEDICAL = 'Medical',
-	POETRY = 'Poetry',
+	ALL = 'all',
+	ART = 'art',
+	BIOGRAPHY = 'biography',
+	COMPUTERS = 'computers',
+	HISTORY = 'history',
+	MEDICAL = 'medical',
+	POETRY = 'poetry',
 }
 
 export enum SortOptions {

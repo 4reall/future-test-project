@@ -16,7 +16,7 @@ const httpRequest = async <T>(
 		});
 
 		if (!(response.status > 199 && response.status < 300)) {
-			throw new Error(
+			console.error(
 				`Could not fetch ${requestConfig?.url}, status: ${response.status}`
 			);
 		}
